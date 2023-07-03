@@ -18,8 +18,15 @@ func hello(w http.ResponseWriter, req *http.Request) {
         log.Fatal(err)
     }
     uob :=userop.NewUserOpBuilder(ownerAddress,client)
-    address := uob.GetCounterFactualAddress()
-    fmt.Fprintf(w, address.String())
+    
+    //address := uob.GetCounterFactualAddress()
+    uop := uob.CreateUnsignedUserOp()
+    jsonData,err := uop.MarshalJSON()
+    if err != nil {
+        log.Fatal(err)
+    }
+    w.Header().Set("Content-Type", "application/json")
+    w.Write(jsonData)
 }
 
 func headers(w http.ResponseWriter, req *http.Request) {
